@@ -4,47 +4,39 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class RemoveClansUserIdColumn extends Migration
+return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up(): void
     {
         Schema::table('clans', function (Blueprint $table) {
-            // Drop the foreign key constraint if it exists
+            // Drop the foreign key explicitly by name
             $foreignKeyName = 'clans_user_id_foreign';
-            $sm = Schema::getConnection()->getDoctrineSchemaManager();
-            $foreignKeys = $sm->listTableForeignKeys('clans');
-            $exists = collect($foreignKeys)->contains(fn($fk) => $fk->getName() === $foreignKeyName);
 
-            if ($exists) {
+            // Only drop if it exists
+            try {
                 $table->dropForeign($foreignKeyName);
+            } catch (\Illuminate\Database\QueryException $e) {
+                // Foreign key doesn't exist; ignore
             }
 
-            // Drop the 'user_id' column
-            $table->dropColumn('user_id');
+            // Drop the 'user_id' column if it exists
+            if (Schema::hasColumn('clans', 'user_id')) {
+                $table->dropColumn('user_id');
+            }
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down(): void
     {
         Schema::table('clans', function (Blueprint $table) {
-            // Recreate the 'user_id' column
+            // Re-add the 'user_id' column
             $table->unsignedBigInteger('user_id')->nullable();
 
-            // Recreate the foreign key constraint
+            // Re-add the foreign key
             $table->foreign('user_id')
                   ->references('id')
                   ->on('users')
                   ->onDelete('cascade');
         });
     }
-}
+};
