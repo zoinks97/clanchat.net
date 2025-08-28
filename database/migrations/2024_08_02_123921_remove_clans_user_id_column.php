@@ -31,6 +31,7 @@ return new class extends Migration
 
         Schema::table('clans', function (Blueprint $table) {
             // Drop the user_id column
+            $table->dropForeign(['user_id']);
             $table->dropColumn('user_id');
         });
     }
