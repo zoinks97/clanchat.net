@@ -45,7 +45,7 @@ class MessageController extends Controller
     
         return response()->json(['status' => 'success', 'data' => 'Message has been processed.']);
     }
-
+}
             $message = new ClanMessage;
             $message->username = $requestMessage->author;
             $message->content = $requestMessage->content;
