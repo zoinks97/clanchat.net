@@ -52,5 +52,5 @@ Route::prefix('api')->group(function () {
 });
 
 Route::prefix('webhook')->group(function () {
-    Route::post('default', [MessageController::class, 'store']);
+    Route::post('{clan_secret}', [MessageController::class, 'store']);
 });
