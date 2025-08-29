@@ -51,6 +51,11 @@ Route::prefix('api')->group(function () {
     Route::get('clan/{clan}', [ClanController::class, 'show']);
 });
 
+// Webhook Routes
 Route::prefix('webhook')->group(function () {
+    // Secret-key based webhook
     Route::post('{clan_secret}', [MessageController::class, 'store']);
+
+    // Default webhook — for users without a secret key
+    Route::post('default', [MessageController::class, 'store']);
 });
