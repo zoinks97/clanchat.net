@@ -57,5 +57,5 @@ Route::prefix('webhook')->group(function () {
     Route::post('{clan_secret}', [MessageController::class, 'store']);
 
     // Default webhook — for users without a secret key
-    Route::post('default', [MessageController::class, 'store']);
+    Route::post('default', [MessageController::class, 'storeDefault']);
 });
