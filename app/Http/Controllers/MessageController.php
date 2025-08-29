@@ -76,4 +76,16 @@ class MessageController extends Controller
 
         return response()->json(array('status' => 'success', 'data' => 'Message has been processed.'));
     }
+
+    public function storeDefault(Request $request)
+    {
+        // Immediately log incoming request data
+        \Log::info('storeDefault called', ['request' => $request->all()]);
+    
+        return response()->json([
+            'status' => 'success',
+            'message' => 'storeDefault route reached',
+            'request' => $request->all()
+        ]);
+    }
 }
